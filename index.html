@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lemma Cloud — Autonomous Capital Intelligence</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    :root {
+      --accent: #00f5ff;
+      --text: #f0f0f0;
+      --bg: #0a0a0a;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.75;
+    }
+
+    /* Progress */
+    .progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #00f5ff, #00bfff); z-index: 9999; width: 0%; transition: width 0.1s; }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed; width: 32px; height: 32px; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 99999;
+      mix-blend-mode: difference; transform: translate(-50%, -50%); transition: all 0.15s ease;
+    }
+
+    /* Hero */
+    .hero {
+      height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;
+      background: radial-gradient(circle at 40% 30%, #1a2a44 0%, #0a0a0a 70%);
+      overflow: hidden;
+    }
+    .hero-content {
+      text-align: center; z-index: 2;
+    }
+    .hero h1 {
+      font-size: clamp(6rem, 18vw, 14rem); font-weight: 900; letter-spacing: -0.07em; line-height: 0.82;
+      background: linear-gradient(90deg, #ffffff, var(--accent), #a0f8ff); 
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .tagline {
+      font-size: 2.4rem; margin: 2rem 0 3.5rem; max-width: 980px; opacity: 0.92;
+    }
+
+    section { padding: 180px 8% 220px; position: relative; }
+    .sticky-title {
+      position: sticky; top: 80px; font-size: 4.8rem; font-weight: 850; line-height: 1.05; z-index: 10; margin-bottom: 4rem;
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.04); backdrop-filter: blur(24px); border: 1px solid rgba(0,245,255,0.18);
+      border-radius: 32px; padding: 3.2rem; transition: all 0.9s cubic-bezier(0.23,1,0.32,1);
+    }
+    .glass:hover {
+      transform: translateY(-30px) scale(1.04); border-color: var(--accent); box-shadow: 0 50px 120px rgba(0,245,255,0.22);
+    }
+
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2.5rem;
+    }
+
+    .nav {
+      position: fixed; top: 40px; right: 5%; z-index: 1000; display: flex; gap: 2rem; font-size: 1.05rem;
+    }
+    .nav a {
+      color: #aaa; text-decoration: none; transition: color 0.3s;
+    }
+    .nav a:hover { color: var(--accent); }
+
+    .cta-btn:focus-visible {
+      outline: 3px solid var(--accent); outline-offset: 4px;
+    }
+
+    footer {
+      padding: 160px 8% 100px; text-align: center; background: #050505;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress" id="progress"></div>
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#swarm">Swarm</a>
+    <a href="#capabilities">Capabilities</a>
+    <a href="#intelligence">Intelligence</a>
+    <a href="#vision">Vision</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <h1>LEMMA</h1>
+      <h1 style="margin-top:-70px;">CLOUD</h1>
+      <p class="tagline">The Autonomous Capital Intelligence Network</p>
+      <p style="font-size:1.5rem; max-width:820px; margin:0 auto 4rem; opacity:0.85;">
+        A living swarm of intelligence agents that transforms static financial documents into dynamic, self-evolving capital that compounds faster than it moves.
+      </p>
+      <button onclick="document.getElementById('swarm').scrollIntoView({behavior:'smooth'})" 
+              class="cta-btn"
+              style="background:var(--accent); color:#000; padding:22px 68px; border:none; border-radius:9999px; font-size:1.4rem; font-weight:700; cursor:pointer;">
+        Begin Intelligence Journey
+      </button>
+    </div>
+
+    <!-- Subtle 3D Background -->
+    <canvas id="bgCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.15; z-index:1;"></canvas>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section style="background:#0c0c14;">
+    <div style="max-width:1100px; margin:0 auto;">
+      <h2 class="sticky-title">We don't finance assets.<br>We awaken intelligence within them.</h2>
+      <p style="font-size:1.55rem; line-height:1.85; max-width:920px; opacity:0.9;">
+        Lemma Cloud is powered by Helix — the autonomous CEO agent — and a constellation of specialized OpenClaw agents. 
+        Together they ingest any invoice, receivable, contract, or cash flow document and convert it into living intelligence.
+      </p>
+    </div>
+  </section>
+
+  <!-- THE SWARM -->
+  <section id="swarm">
+    <h2 class="sticky-title">The Intelligence Swarm</h2>
+    <div class="feature-grid">
+      <div class="glass">
+        <h3 style="color:var(--accent); font-size:2.6rem; margin-bottom:1rem;">Helix</h3>
+        <p><strong>CEO Agent</strong><br>Strategic command, vision, capital allocation, and governance of the entire self-improving network.</p>
+      </div>
+      <div class="glass">
+        <h3 style="color:var(--accent); font-size:2.6rem; margin-bottom:1rem;">Aether</h3>
+        <p><strong>Document Intelligence</strong><br>Multimodal extraction and deep semantic understanding of any financial document.</p>
+      </div>
+      <div class="glass">
+        <h3 style="color:var(--accent); font-size:2.6rem; margin-bottom:1rem;">Nexus</h3>
+        <p><strong>Risk &amp; Opportunity Engine</strong><br>Uncovers hidden patterns, timing dynamics, and cross-asset synergies.</p>
+      </div>
+      <div class="glass">
+        <h3 style="color:var(--accent); font-size:2.6rem; margin-bottom:1rem;">Velocity</h3>
+        <p><strong>Capital Optimization</strong><br>Designs optimal liquidity pathways and acceleration strategies.</p>
+      </div>
+      <div class="glass">
+        <h3 style="color:var(--accent); font-size:2.6rem; margin-bottom:1rem;">Echo</h3>
+        <p><strong>Reflection &amp; Evolution</strong><br>Runs continuous self-improvement loops and nightly intelligence upgrades.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section id="capabilities" style="background:#111;">
+    <h2 class="sticky-title">Core Capabilities</h2>
+    <div class="feature-grid">
+      <div class="glass">
+        <strong style="color:var(--accent);">Instant Semantic Ingestion</strong><br>
+        Any document type — PDF, image, email, spreadsheet — is understood in context within seconds.
+      </div>
+      <div class="glass">
+        <strong style="color:var(--accent);">Deep Relationship Mapping</strong><br>
+        Maps counterparties, timing sensitivity, risk vectors, and hidden value across your entire portfolio.
+      </div>
+      <div class="glass">
+        <strong style="color:var(--accent);">Autonomous Optimization Engine</strong><br>
+        Velocity proposes ranked capital pathways with projected velocity gains and risk-adjusted outcomes.
+      </div>
+      <div class="glass">
+        <strong style="color:var(--accent);">Recursive Self-Improvement</strong><br>
+        Every processed asset makes the entire swarm significantly more intelligent for future decisions.
+      </div>
+      <div class="glass">
+        <strong style="color:var(--accent);">Live Capital Velocity Dashboard</strong><br>
+        Real-time metrics showing compounded intelligence and realized acceleration.
+      </div>
+      <div class="glass">
+        <strong style="color:var(--accent);">Swarm Orchestration</strong><br>
+        Helix coordinates all agents through shared persistent memory for coherent, compounding intelligence.
+      </div>
+    </div>
+  </section>
+
+  <!-- INTELLIGENCE -->
+  <section id="intelligence">
+    <h2 class="sticky-title">Compounding Intelligence</h2>
+    <div style="max-width:1000px; margin:0 auto; font-size:1.45rem; line-height:1.9;">
+      <p>The true power of Lemma Cloud lies in its recursive nature. Every document processed becomes training data. Every decision made is analyzed. Every outcome feeds back into the system through Echo's reflection loops.</p>
+      <p style="margin-top:2.5rem;">This creates a flywheel effect: the longer Lemma Cloud operates, the more accurate, creative, and powerful its capital intelligence becomes — delivering compounding returns on both capital and intelligence.</p>
+    </div>
+  </section>
+
+  <!-- VISION -->
+  <section id="vision" style="background:#0a0a0a;">
+    <h2 class="sticky-title">The Future of Capital</h2>
+    <div style="max-width:1100px; margin:0 auto;">
+      <p style="font-size:1.6rem; line-height:1.85;">
+        Lemma Cloud is building the operating system for the agent-driven capital economy.<br><br>
+        We are not creating another fintech tool. We are creating the intelligence layer that sits above capital itself — autonomous, self-evolving, and relentlessly compounding.
+      </p>
+      <div style="margin-top:5rem; text-align:center;">
+        <p style="font-size:1.3rem; opacity:0.8;">Early participants gain access to the most advanced capital intelligence system in existence.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p style="font-size:2rem; max-width:900px; margin:0 auto 3rem;">
+      Lemma Cloud — Where capital becomes intelligence that compounds faster than it is collected.
+    </p>
+    <p style="opacity:0.6;">A living demonstration of what is possible when OpenClaw meets Helix.</p>
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      document.getElementById("progress").style.width = (winScroll / height) * 100 + "%";
+    });
+
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Reveal Animations
+    gsap.utils.toArray('.glass').forEach((el, i) => {
+      gsap.fromTo(el, 
+        { opacity: 0, y: 120 }, 
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 1.3, 
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 85%" }
+        }
+      );
+    });
+
+    // Hero Title Animation
+    gsap.from(".hero h1", {
+      y: 180,
+      opacity: 0,
+      duration: 2.2,
+      ease: "power4.out",
+      stagger: 0.25
+    });
+
+    // Simple Particle Background using Three.js
+    function createBackground() {
+      const canvas = document.getElementById('bgCanvas');
+      let resizeTimer;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const particles = new THREE.BufferGeometry();
+      const particleCount = 800;
+      const positions = new Float32Array(particleCount * 3);
+
+      for(let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 2000;
+        positions[i+1] = (Math.random() - 0.5) * 2000;
+        positions[i+2] = (Math.random() - 0.5) * 2000;
+      }
+
+      particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const material = new THREE.PointsMaterial({ color: 0x00f5ff, size: 4, transparent: true, opacity: 0.6 });
+      const pointCloud = new THREE.Points(particles, material);
+      scene.add(pointCloud);
+      camera.position.z = 800;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        pointCloud.rotation.y += 0.0002;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }, 150);
+      });
+    }
+
+    createBackground();
+
+    console.log("%c✓ Lemma Cloud — Ultra-Premium Awwwards Experience Loaded", "color:#00f5ff; font-size:16px; font-weight:700;");
+  </script>
+</body>
+</html>
